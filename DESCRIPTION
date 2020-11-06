@@ -1,0 +1,18 @@
+Package: UTCIr
+Type: Package
+Title: PET
+Version: 0.1.0
+Authors@R: as.person(c(
+      "Colin Harpham <.harpham@uea.ac.uk> [aut,cre]",
+      "KNMI [cph]"))
+Maintainer: ECAD <eca@knmi.nl>
+Depends:
+    R (>= 2.12.0)
+Imports:
+    ncdf4 (>= 1.10)
+Description: Estimates Universal Thermal Climate Index.
+    The climate variables required are Tmax, Tmin, vapour pressure, wind speed, radiation.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.0.2
