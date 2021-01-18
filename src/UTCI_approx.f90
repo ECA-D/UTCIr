@@ -6,18 +6,18 @@ subroutine calc_UTCI_vector(jd, lat, tmax, tmin, rh, rs, ws, ndat, utci)
 !   Tmax data     degree Celsius
 !   Tmin data     degree Celsius
 
-!   RH data     RH                                  units ????????
-!   RS data     radiation - downwelling short wave  units ????????
+!   RH data     RH %
+!   RS data     downwelling short wave radiation MJ/m^2
 !   WS data     wind 10m m/s
 !   lat         latitude
 
     implicit none
     real*8  lat, tmax(1:ndat), tmin(1:ndat), rh(1:ndat), rs(1:ndat), ws(1:ndat)
-    real*8  alpha, ehPa, Tmrt, utci(1:ndat), UTCI_approx
+    real*8  alpha, ehPa, Tmrt, utci(1:ndat), UTCI_approx, albedo
     integer jd(1:ndat), ndat
     integer i
     alpha = 0.85
-
+    albedo = 0.23
  
     do i=1,ndat
         ! check for missing values
@@ -25,7 +25,7 @@ subroutine calc_UTCI_vector(jd, lat, tmax, tmin, rh, rs, ws, ndat, utci)
             utci(i) = -999.9
         else
 
-            call mrt(jd(i), lat, tmax(i), alpha, rs(i), Tmrt)
+            call mrt(jd(i), lat, tmax(i), alpha, rs(i), Tmrt, albedo)
             call vapourpressure(rh(i), tmax(i), tmin(i), ehPa)
 
         ! vapour pressure is required in hPa (given in kPa)
@@ -288,7 +288,7 @@ end
       real FUNCTION es(ta)
 !~ **********************************************
 !~ calculates saturation vapour pressure over water in hPa for input air temperature (ta) in celsius according to:
-!~ Hardy, R.; ITS-90 Formulations for Vapor Pressure, Frostpoint Temperature, Dewpoint Temperature and Enhancement Factors in the Range -100 to 100 °C; 
+!~ Hardy, R.; ITS-90 Formulations for Vapor Pressure, Frostpoint Temperature, Dewpoint Temperature and Enhancement Factors in the Range -100 to 100 ?C; 
 !~ Proceedings of Third International Symposium on Humidity and Moisture; edited by National Physical Laboratory (NPL), London, 1998, pp. 214-221
 !~ http://www.thunderscientific.com/tech_info/reflibrary/its90formulas.pdf (retrieved 2008-10-01)
       
@@ -318,7 +318,7 @@ end
 
 !############### end of Broede routines ########################################
 
-subroutine mrt(yearday,phi,Temp,alpha,qir,Tmrt)
+subroutine mrt(yearday,phi,Temp,alpha,qir,Tmrt,albedo)
 ! documentation to this subroutine is in rep110610
 ! or in the UTCI documentation & P.O. Fanger (1970)
 !
@@ -335,7 +335,7 @@ subroutine mrt(yearday,phi,Temp,alpha,qir,Tmrt)
       implicit none
 
       integer      yearday
-      real*8       xgamma,arg,phi,Tumrt,alpha,qir,Tmrt,fp
+      real*8       xgamma,arg,phi,Tumrt,alpha,qir,Tmrt,fp, albedo
       real*8       C2K,K2C,xdum,temp
 
       Tumrt = C2K(Temp)
@@ -344,7 +344,7 @@ subroutine mrt(yearday,phi,Temp,alpha,qir,Tmrt)
 ! his units are kcal m^-2 hr^-1, here we adhere to the units used
 ! in the PET routines: MJ m^-2 d^-1. The factor between these units is: 9.968
 ! which (approximately) explains the difference.
-      arg=Tumrt**4 + 0.210*(10**9)*fp(yearday,phi)*alpha*qir
+      arg=Tumrt**4 + 0.210*(10**9)*fp(yearday,phi)*alpha*(qir + (qir*albedo))
 
       Tmrt=sqrt(sqrt(arg))
 
