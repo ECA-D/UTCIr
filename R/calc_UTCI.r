@@ -18,7 +18,7 @@
 #' Also rquired is the latitude and longitude
 #' lat = Latitude  (degrees)
 #' lon = Longitude (degrees)
-#' Elevation (needed) is retrieved from the PETr internal file "data/elev_dat.rda" which contains data from:
+#' Elevation (needed) is retrieved from the UTCIr internal file "data/elev_dat.rda" which contains data from:
 #' http://www.ecad.eu/download/ensembles/data/Grid_0.1deg_reg_ensemble/elev_ens_0.1deg_reg_v17.0e.nc
 #' Missing values should be converted to NA
 #'

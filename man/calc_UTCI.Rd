@@ -22,20 +22,14 @@ Where the dataframe "indat" contains the following variables:
 
 tmin  = Temperature min    (degrees Celsius)
 tmax  = Temperature max    (degrees Celsius)
-only one of the following variables (vp OR rh OR dp) are to be passed
-vp  = Vapour pressure    (hPa)
 rh =  Relative humidity  (\%)
-dp =  Dewpoint           (degrees Celsius)
 ws  = Wind speed at 10m  (m/s)
-either ss or rs is passed, but not both
-ss  = Sunshine duration  (0-24 hours)
-cl  = Cloudiness         (0-1)
-cl is optional for use with ss, if unavailble cl is estimated
 rs  = radiation          (MJ/m^2)
+
 Also rquired is the latitude and longitude
 lat = Latitude  (degrees)
 lon = Longitude (degrees)
-Elevation (needed) is retrieved from the PETr internal file "data/elev_dat.rda" which contains data from:
+Elevation (needed) is retrieved from the UTCIr internal file "data/elev_dat.rda" which contains data from:
 http://www.ecad.eu/download/ensembles/data/Grid_0.1deg_reg_ensemble/elev_ens_0.1deg_reg_v17.0e.nc
 Missing values should be converted to NA
 
